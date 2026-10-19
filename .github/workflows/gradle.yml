@@ -30,6 +30,12 @@ jobs:
 
       - run: ./gradlew clean jar --no-daemon --stacktrace
 
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(grep "^version" build.gradle | sed "s/.*['\"]\\(.*\\)['\"].*/\\1/")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
       - name: Find JAR
         id: jar
         run: |
@@ -39,10 +45,12 @@ jobs:
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_name || format('build-{0}', github.run_number) }}
-          name: PaperAccurateBlockPlacement ${{ github.ref_name || format('build-{0}', github.run_number) }}
+          tag_name: ${{ steps.version.outputs.version }}
+          name: ${{ steps.version.outputs.version }}
           body: |
-            - 适配 Minecraft **26.3**
+            ## 适配 Minecraft **26.3**
+
+            **依赖**
             - 需要 PacketEvents ≥ 2.14.0
           files: ${{ steps.jar.outputs.jar }}
           generate_release_notes: true
