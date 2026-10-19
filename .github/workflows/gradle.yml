@@ -39,11 +39,17 @@ jobs:
       - name: Find the built JAR
         id: jar
         run: |
-          JAR_FILE=$(find build/libs -name "*.jar" ! -name "*-sources.jar" ! -name "*-javadoc.jar" ! -name "*-plain.jar" | head -n 1)
+          echo "=== build/libs 内容 ==="
+          ls -la build/libs/ || echo "目录不存在"
+
+          JAR_FILE=$(ls build/libs/*.jar 2>/dev/null | head -n 1)
+
           if [ -z "$JAR_FILE" ]; then
-            echo "No JAR found!"
+            echo "No JAR found in build/libs"
             exit 1
           fi
+
+          echo "找到: $JAR_FILE"
           echo "jar=$JAR_FILE" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
