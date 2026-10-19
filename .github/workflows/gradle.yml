@@ -48,11 +48,11 @@ jobs:
           tag_name: ${{ steps.version.outputs.version }}
           name: ${{ steps.version.outputs.version }}
           body: |
-            ## 适配 Minecraft **26.3**
+            适配 Minecraft **26.3**
 
             **依赖**
             - 需要 PacketEvents ≥ 2.14.0
           files: ${{ steps.jar.outputs.jar }}
-          generate_release_notes: true
+          generate_release_notes: false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
